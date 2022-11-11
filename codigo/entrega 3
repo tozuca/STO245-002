@@ -1,0 +1,57 @@
+import pandas as pd
+import gmplot 
+import objetos
+#importacion del csv
+csv=pd.read_csv('C:\proyecto datos\calles_de_medellin_con_acoso (1).csv',sep=';')
+
+#correcion del csv
+correcion  = csv.fillna({"harassmentRisk":csv['harassmentRisk'].mean()})
+apikey='AIzaSyAEoJwf7WtJ_3zlUMAu5RSVpRtr5UE32gQ'
+gmap3 = gmplot.GoogleMapPlotter(6.2029412,0-75.5778046, 13,apikey=apikey)
+temp=[]
+
+for i in range (0,3):
+  if i == 0:
+    temp=objetos.dijkstra(objetos.crearGrafo1(correcion),'(-75.5778046, 6.2029412)','(-75.5762232, 6.266327)')
+
+    latitude_list = []
+    longitude_list = [] 
+
+    for j in range (0,len(temp)):
+      hola=str(temp[j])
+      longitude_list.append(float(hola[1:hola.find(",")]))
+      latitude_list.append(float(hola[hola.find(",")+2:len(hola)-1]))
+    
+    gmap3.scatter( latitude_list, longitude_list, size = 40, marker = False ) 
+    gmap3.plot(latitude_list, longitude_list, '#00fcf0', edge_width = 2.5) 
+
+  if i == 1:
+    temp=objetos.dijkstra(objetos.crearGrafo2(correcion),'(-75.5778046, 6.2029412)','(-75.5762232, 6.266327)')
+    latitude_list = []
+    longitude_list = [] 
+    
+    for j in range (0,len(temp)):
+      hola=str(temp[j])
+      longitude_list.append(float(hola[1:hola.find(",")]))
+      latitude_list.append(float(hola[hola.find(",")+2:len(hola)-1]))
+    
+    gmap3.scatter( latitude_list, longitude_list, size = 40, marker = False ) 
+    gmap3.plot(latitude_list, longitude_list, '#000000', edge_width = 2.5) 
+    
+  if i == 2:
+    temp=objetos.dijkstra(objetos.crearGrafo3(correcion),'(-75.5778046, 6.2029412)','(-75.5762232, 6.266327)')
+
+    latitude_list = []
+    longitude_list = []
+   
+    for j in range (0,len(temp)):
+      hola=str(temp[j])
+      longitude_list.append(float(hola[1:hola.find(",")]))
+      latitude_list.append(float(hola[hola.find(",")+2:len(hola)-1]))
+    
+    gmap3.scatter( latitude_list, longitude_list, size = 40, marker = False ) 
+    gmap3.plot(latitude_list, longitude_list, '#8c00ff', edge_width = 2.5) 
+
+  
+  
+gmap3.draw("C:\proyecto datos\map13.html")                                                                                           
